@@ -2,6 +2,8 @@ import streamlit as st
 from nltk.chat.util import Chat, reflections
 from frases import pares
 
+st.set_page_config(page_title="Chatbot con NLTK", page_icon="💬", layout="centered")
+
 # Crear instancia del chatbot con NLTK
 chatbot = Chat(pares, reflections)
 
