@@ -13,7 +13,7 @@ with st.sidebar:
     st.caption("🚀 Grupo sin TACC pero con Tocs")
     st.markdown(
     """
-    [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/juan-albornoz/Chatbot)
+    [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/juan-albornoz/Chatbot)
     """
 )
 
