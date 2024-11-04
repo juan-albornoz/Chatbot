@@ -2,35 +2,37 @@ import streamlit as st
 from nltk.chat.util import Chat, reflections
 from frases import pares
 
-# Crear instancia del chatbot
+# Crear instancia del chatbot con NLTK
 chatbot = Chat(pares, reflections)
 
-# Configuración de la aplicación con Streamlit
-st.title("Chatbot con NLTK y Streamlit")
-st.write("Grupo sin TACC pero con Tocs")
+# Configuración de la barra lateral
+with st.sidebar:
+    st.title("💬 Chatbot con NLTK")
+    st.caption("🚀 Grupo sin TACC pero con Tocs")
+    st.markdown(
+    """
+    [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/juan-albornoz/Chatbot)
+    """
+)
 
-# Inicializar una lista para almacenar el historial de conversación
-if "conversation_history" not in st.session_state:
-    st.session_state.conversation_history = []
+# Título principal de la aplicación
+st.title("💬 Chat")
 
-# Entrada de usuario
-user_input = st.text_input("Tú:", "")
+# Inicializar el historial de mensajes en el estado de la sesión
+if "messages" not in st.session_state:
+    st.session_state["messages"] = [{"role": "assistant", "content": "¿En qué puedo ayudarte?"}]
 
-# Procesar entrada cuando se ingresa texto
-if user_input:
-    # Obtener la respuesta del chatbot
-    response = chatbot.respond(user_input)
+# Mostrar mensajes previos
+for msg in st.session_state.messages:
+    st.chat_message(msg["role"]).write(msg["content"])
+
+# Input del usuario
+if prompt := st.chat_input("Escribe tu mensaje aquí..."):
+    # Agregar el mensaje del usuario al historial
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    st.chat_message("user").write(prompt)
     
-    # Guardar la conversación en el historial
-    st.session_state.conversation_history.append(("Tú", user_input))
-    st.session_state.conversation_history.append(("Chatbot", response))
-    
-    # Limpiar el campo de entrada
-    st.session_state["user_input"] = ""  # Esto restablece la entrada de texto
-
-# Mostrar el historial de conversación
-for i, (sender, message) in enumerate(st.session_state.conversation_history):
-    if sender == "Tú":
-        st.text_area("Tú:", message, height=50, disabled=True, key=f"user_{i}")
-    else:
-        st.text_area("Chatbot:", message, height=50, disabled=True, key=f"bot_{i}")
+    # Obtener respuesta del chatbot de NLTK
+    response = chatbot.respond(prompt)
+    st.session_state.messages.append({"role": "assistant", "content": response})
+    st.chat_message("assistant").write(response)
